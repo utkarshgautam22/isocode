@@ -13,9 +13,9 @@ from datetime import datetime
 log_file = f"submissions/codejudge_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 os.makedirs("submissions", exist_ok=True)
 
-# Configure the logger
+# Configure the logger with WARNING level instead of INFO to reduce output
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,  # Changed from INFO to WARNING
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler(log_file),
@@ -24,18 +24,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger('codejudge')
 
+# If you want to completely disable logging, uncomment this line:
+# logger.disabled = True
+
 # Initialize Docker client
 client = docker.from_env()
 
-def parse_test_cases(input_data, expected_output=None):
-    # Define test case delimiters
-    test_case_pattern = r"---\s*TEST\s*CASE\s*\d+\s*---"
+def parse_test_cases(input_data, expected_output=None,test_case_delimiter='\n'):
     
     if not input_data:
         return [{'input': '', 'expected_output': expected_output}]
     
     # Split input by test case delimiter
-    input_parts = re.split(test_case_pattern, input_data)
+    input_parts = re.split(test_case_delimiter, input_data)
     # Remove empty parts and strip whitespace
     input_parts = [part.strip() for part in input_parts if part.strip()]
     
@@ -46,7 +47,7 @@ def parse_test_cases(input_data, expected_output=None):
     # If expected output is provided, try to split it into parts as well
     expected_parts = []
     if expected_output:
-        expected_parts = re.split(test_case_pattern, expected_output)
+        expected_parts = re.split(test_case_delimiter, expected_output)
         expected_parts = [part.strip() for part in expected_parts if part.strip()]
     
     # Create test cases

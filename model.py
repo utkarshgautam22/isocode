@@ -33,7 +33,7 @@ class Problem(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    tag = Column(String, nullable=False)  # e.g., "Sorting", "Graph", etc.
+    # tag = Column(String, nullable=False)  # e.g., "Sorting", "Graph", etc.
     difficulty = Column(String, nullable=False)  # Easy, Medium, Hard
     time_limit = Column(Float, default=1.0)  # seconds
     memory_limit = Column(Integer, default=128)  # MB

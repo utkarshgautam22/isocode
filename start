@@ -1,0 +1,3 @@
+#!/bin/bash
+# start_server.sh
+uvicorn main:app --reload --reload-exclude "testing/*" --reload-exclude "submissions/*"  --reload-exclude "frontend/*"

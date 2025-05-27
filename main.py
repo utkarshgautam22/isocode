@@ -79,10 +79,34 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/run/")
-async def run_code(code: str, language: str, db: Session = Depends(get_db)):
+@app.post("/run/{problem_id}")
+async def run_code(problem_id: int,code: str, language: str, db: Session = Depends(get_db)):
+    
+    problem = db.query(Problem).filter(Problem.id == problem_id).first()
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    
+    # get test cases for the problem with is_sample=true
+    test_cases = db.query(TestCase).filter(
+        TestCase.problem_id == problem_id,
+        TestCase.is_sample == True
+    ).all()
+    if not test_cases:
+        raise HTTPException(status_code=404, detail="No sample test cases found for this problem")
+    
+    input_data = ""
+    expected_output = ""
+    for i, test_case in enumerate(test_cases):
+        input_data += f"{test_case.input_data}\n"
+        expected_output += f"{test_case.expected_output}\n"
+
     try:
-        result = execute_code(language=language, source_code=code)
+        result = execute_code(
+            language=language, 
+            source_code=code,
+            input_data=input_data,
+            expected_output=expected_output
+        )
         return {"result": result}
     except Exception as e:
         return {"error": str(e)}
@@ -109,8 +133,8 @@ async def submit_code(
     input_data = ""
     expected_output = ""
     for i, test_case in enumerate(test_cases):
-        input_data += f"--- TEST CASE {i+1} ---\n{test_case.input_data}\n"
-        expected_output += f"--- TEST CASE {i+1} ---\n{test_case.expected_output}\n"
+        input_data += f"{test_case.input_data}\n"
+        expected_output += f"{test_case.expected_output}\n"
     
     try:
         # Execute code with test cases
@@ -206,12 +230,12 @@ async def create_problem(
     difficulty: str,
     time_limit: float = 1.0,
     memory_limit: int = 128,
-    current_user: User = Depends(get_current_user),
+    # current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     # Only admins can create problems
-    if not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Not authorized to create problems")
+    # if not current_user.is_admin:
+    #     raise HTTPException(status_code=403, detail="Not authorized to create problems")
     
     new_problem = Problem(
         title=title,
@@ -233,12 +257,12 @@ async def add_test_case(
     input_data: str,
     expected_output: str,
     is_sample: bool = False,
-    current_user: User = Depends(get_current_user),
+    # current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     # Only admins can add test cases
-    if not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Not authorized to add test cases")
+    # if not current_user.is_admin:
+    #     raise HTTPException(status_code=403, detail="Not authorized to add test cases")
     
     # Check if problem exists
     problem = db.query(Problem).filter(Problem.id == problem_id).first()
