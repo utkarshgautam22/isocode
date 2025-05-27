@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Clone - Practice Coding</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>LeetClone</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link active">Problems</a>
+                    <a href="#" class="nav-link">Contest</a>
+                    <a href="#" class="nav-link">Discuss</a>
+                    <a href="#" class="nav-link">Interview</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search problems..." class="search-input" id="searchInput">
+                </div>
+                <button class="btn-premium">Premium</button>
+                <div class="user-menu">
+                    <img src="https://via.placeholder.com/32" alt="User" class="user-avatar" id="userAvatar">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="profile.html">Profile</a>
+                        <a href="#">Settings</a>
+                        <a href="#">Sign Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <h1>Problems</h1>
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProblems">0</div>
+                        <div class="stat-label">Total Problems</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="solvedProblems">0</div>
+                        <div class="stat-label">Solved</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="acceptanceRate">0%</div>
+                        <div class="stat-label">Acceptance Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label>Difficulty:</label>
+                    <select id="difficultyFilter" class="filter-select">
+                        <option value="">All</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All</option>
+                        <option value="solved">Solved</option>
+                        <option value="attempted">Attempted</option>
+                        <option value="todo">Todo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Tags:</label>
+                    <select id="tagFilter" class="filter-select">
+                        <option value="">All Tags</option>
+                        <option value="array">Array</option>
+                        <option value="string">String</option>
+                        <option value="dynamic-programming">Dynamic Programming</option>
+                        <option value="tree">Tree</option>
+                        <option value="graph">Graph</option>
+                    </select>
+                </div>
+                <button class="btn-reset" id="resetFilters">Reset Filters</button>
+            </div>
+
+            <!-- Problems Table -->
+            <div class="problems-container">
+                <div class="table-header">
+                    <div class="header-cell status-col">Status</div>
+                    <div class="header-cell title-col">Title</div>
+                    <div class="header-cell acceptance-col">Acceptance</div>
+                    <div class="header-cell difficulty-col">Difficulty</div>
+                    <div class="header-cell frequency-col">Frequency</div>
+                </div>
+                <div class="problems-list" id="problemsList">
+                    <!-- Problems will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>Loading problems...</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn" id="prevBtn">Previous</button>
+                <div class="page-numbers" id="pageNumbers"></div>
+                <button class="page-btn" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Daily Challenge Modal -->
+    <div class="modal" id="dailyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Daily Challenge</h2>
+                <button class="close-btn" id="closeDailyModal">&times;</button>
+            </div>
+            <div class="modal-body" id="dailyContent">
+                <!-- Daily challenge content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

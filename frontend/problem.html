@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem - LeetCode Clone</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>LeetClone</span>
+                </a>
+                <button class="back-btn" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Problems
+                </button>
+            </div>
+            <div class="nav-right">
+                <button class="btn-premium">Premium</button>
+                <div class="user-menu">
+                    <img src="https://via.placeholder.com/32" alt="User" class="user-avatar">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Problem Content -->
+    <div class="problem-container">
+        <!-- Left Panel - Problem Description -->
+        <div class="problem-panel">
+            <div class="problem-header">
+                <div class="problem-title-section">
+                    <h1 class="problem-title" id="problemTitle">Loading...</h1>
+                    <div class="problem-meta">
+                        <span class="difficulty-badge" id="difficultyBadge">Medium</span>
+                        <div class="problem-stats">
+                            <span class="stat">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span id="likes">0</span>
+                            </span>
+                            <span class="stat">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span id="dislikes">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="problem-actions">
+                    <button class="action-btn" id="favoriteBtn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="action-btn" id="shareBtn">
+                        <i class="fas fa-share"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="problem-content">
+                <div class="problem-description" id="problemDescription">
+                    <!-- Problem description will be loaded here -->
+                </div>
+
+                <div class="problem-examples" id="problemExamples">
+                    <!-- Examples will be loaded here -->
+                </div>
+
+                <div class="problem-constraints" id="problemConstraints">
+                    <!-- Constraints will be loaded here -->
+                </div>
+
+                <div class="problem-tags" id="problemTags">
+                    <!-- Tags will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Code Editor -->
+        <div class="editor-panel">
+            <div class="editor-header">
+                <div class="language-selector">
+                    <select id="languageSelect" class="language-select">
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="c">C</option>
+                    </select>
+                </div>
+                <div class="editor-actions">
+                    <button class="editor-btn" id="resetBtn">
+                        <i class="fas fa-undo"></i>
+                        Reset
+                    </button>
+                    <button class="editor-btn" id="runBtn">
+                        <i class="fas fa-play"></i>
+                        Run
+                    </button>
+                    <button class="editor-btn primary" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-container">
+                <textarea id="codeEditor" class="code-editor"></textarea>
+            </div>
+
+            <div class="test-cases-section">
+                <div class="section-header">
+                    <h3>Test Cases</h3>
+                    <button class="add-test-btn" id="addTestBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Test Case
+                    </button>
+                </div>
+                <div class="test-cases" id="testCases">
+                    <!-- Test cases will be loaded here -->
+                </div>
+            </div>
+
+            <div class="output-section" id="outputSection" style="display: none;">
+                <div class="section-header">
+                    <h3>Output</h3>
+                    <button class="close-output" id="closeOutput">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="output-content" id="outputContent">
+                    <!-- Output will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submission Result Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="resultTitle">Submission Result</h2>
+                <button class="close-btn" id="closeResultModal">&times;</button>
+            </div>
+            <div class="modal-body" id="resultContent">
+                <!-- Result content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="js/problem.js"></script>
+</body>
+</html>
