@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems - CodeMaster</title>
+    <link rel="stylesheet" href="css/problemsDashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="loading-text">Loading Problems...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span class="logo-text">CodeMaster</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <div class="menu-title">Main</div>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="dashboard.html" class="menu-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="problems.html" class="menu-link">
+                            <i class="fas fa-code"></i>
+                            <span>Problems</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-trophy"></i>
+                            <span>Contests</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-history"></i>
+                            <span>Submissions</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Learning</div>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>Study Plan</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Progress</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-medal"></i>
+                            <span>Achievements</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Community</div>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-comments"></i>
+                            <span>Discuss</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class="fas fa-crown"></i>
+                            <span>Leaderboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" id="userAvatar">
+                    <div class="status-indicator online"></div>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-level">Level 5</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Problems</h1>
+                    <p>Practice coding problems and improve your skills</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search problems..." id="globalSearch">
+                </div>
+
+                <div class="header-actions">
+                    <button class="action-btn" id="notificationBtn" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+
+                    <button class="action-btn" id="themeToggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <div class="user-dropdown">
+                        <button class="user-btn">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="User">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Problems Content -->
+        <div class="problems-content">
+            <!-- Problems Header -->
+            <div class="problems-header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html">Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Problems</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" id="randomProblemBtn">
+                        <i class="fas fa-random"></i>
+                        Pick Random
+                    </button>
+                    <button class="btn-primary" id="createProblemBtn">
+                        <i class="fas fa-plus"></i>
+                        Create Problem
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="problems-stats">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="totalProblems">450</div>
+                        <div class="stat-label">Total Problems</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon solved">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="solvedProblems">156</div>
+                        <div class="stat-label">Solved</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon attempted">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="attemptedProblems">89</div>
+                        <div class="stat-label">Attempted</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon todo">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="todoProblems">205</div>
+                        <div class="stat-label">Todo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label>Search:</label>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search problems..." id="problemSearch">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Difficulty:</label>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-difficulty="all">All</button>
+                            <button class="filter-btn easy" data-difficulty="easy">Easy</button>
+                            <button class="filter-btn medium" data-difficulty="medium">Medium</button>
+                            <button class="filter-btn hard" data-difficulty="hard">Hard</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-status="all">All</button>
+                            <button class="filter-btn" data-status="solved">Solved</button>
+                            <button class="filter-btn" data-status="attempted">Attempted</button>
+                            <button class="filter-btn" data-status="todo">Todo</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="categorySelect" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="array">Array</option>
+                            <option value="string">String</option>
+                            <option value="linked-list">Linked List</option>
+                            <option value="tree">Tree</option>
+                            <option value="graph">Graph</option>
+                            <option value="dynamic-programming">Dynamic Programming</option>
+                            <option value="greedy">Greedy</option>
+                            <option value="backtracking">Backtracking</option>
+                            <option value="math">Math</option>
+                            <option value="binary-search">Binary Search</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Sort by:</label>
+                        <select id="sortSelect" class="filter-select">
+                            <option value="default">Default</option>
+                            <option value="title">Title</option>
+                            <option value="difficulty">Difficulty</option>
+                            <option value="acceptance">Acceptance Rate</option>
+                            <option value="frequency">Frequency</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button class="filter-reset" id="resetFilters">
+                            <i class="fas fa-undo"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problems Table Container -->
+            <div class="problems-table-container">
+                <div class="table-header">
+                    <div class="results-info">
+                        <span id="resultsCount">Showing 450 problems</span>
+                    </div>
+                    <div class="view-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="table" title="Table View">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="view-btn" data-view="cards" title="Card View">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                        <div class="page-size-selector">
+                            <label>Show:</label>
+                            <select id="pageSizeSelect">
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="problems-table" id="problemsTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="status-col">Status</th>
+                                <th class="title-col sortable" data-sort="title">
+                                    Title
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="difficulty-col sortable" data-sort="difficulty">
+                                    Difficulty
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="acceptance-col sortable" data-sort="acceptance">
+                                    Acceptance
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="frequency-col sortable" data-sort="frequency">
+                                    Frequency
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="actions-col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problemsTableBody">
+                            <!-- Problems will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Card View -->
+                <div class="problems-cards" id="problemsCards" style="display: none;">
+                    <!-- Problem cards will be rendered here -->
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="problemsLoading" style="display: none;">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <p>Loading problems...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="problemsEmpty" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>No problems found</h3>
+                    <p>Try adjusting your filters or search criteria</p>
+                    <button class="btn-primary" id="clearFiltersBtn">Clear Filters</button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <span id="paginationInfo">Showing 1-20 of 450 problems</span>
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <script src="js/problemsDashboard.js"></script>
+</body>
+</html>

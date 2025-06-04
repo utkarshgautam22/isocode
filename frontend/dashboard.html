@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CodeMaster</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="loading-text">Loading Dashboard...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span class="logo-text">CodeMaster</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <div class="menu-title">Main</div>
+                <ul class="menu-list">
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link" data-page="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="problems">
+                            <i class="fas fa-code"></i>
+                            <span>Problems</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="contests">
+                            <i class="fas fa-trophy"></i>
+                            <span>Contests</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="submissions">
+                            <i class="fas fa-history"></i>
+                            <span>Submissions</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">Learning</div>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="study-plan">
+                            <i class="fas fa-book"></i>
+                            <span>Study Plan</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="progress">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Progress</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" id="userAvatar">
+                    <div class="status-indicator online"></div>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-level">Level 5</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageSubtitle">Welcome back! Here's your coding progress</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search problems..." id="searchInput">
+                </div>
+
+                <div class="header-actions">
+                    <button class="action-btn" id="notificationBtn" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+
+                    <button class="action-btn" id="themeToggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <div class="user-dropdown">
+                        <button class="user-btn">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="User">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Quick Stats -->
+            <section class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Problems Solved</div>
+                        <div class="stat-change positive">+12 this week</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">#2,543</div>
+                        <div class="stat-label">Global Ranking</div>
+                        <div class="stat-change positive">↑ 127 positions</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">23</div>
+                        <div class="stat-label">Day Streak</div>
+                        <div class="stat-change neutral">Keep it up!</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon info">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number">1,847</div>
+                        <div class="stat-label">Total Points</div>
+                        <div class="stat-change positive">+89 this week</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Progress Overview -->
+                <div class="dashboard-card progress-card">
+                    <div class="card-header">
+                        <h3>Progress Overview</h3>
+                        <button class="card-action-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="progress-chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                    <div class="progress-summary">
+                        <div class="progress-item easy">
+                            <div class="progress-info">
+                                <span class="difficulty-label">Easy</span>
+                                <span class="progress-count">85/150</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 56.7%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item medium">
+                            <div class="progress-info">
+                                <span class="difficulty-label">Medium</span>
+                                <span class="progress-count">58/200</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 29%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item hard">
+                            <div class="progress-info">
+                                <span class="difficulty-label">Hard</span>
+                                <span class="progress-count">13/100</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 13%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-card activity-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <a href="#" class="view-all-link">View All</a>
+                    </div>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Problem Solved</div>
+                                <div class="activity-description">Completed "Two Sum" in 5 minutes</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Contest Participation</div>
+                                <div class="activity-description">Joined Weekly Contest 285</div>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Achievement Unlocked</div>
+                                <div class="activity-description">Earned "Speed Demon" badge</div>
+                                <div class="activity-time">3 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Chart -->
+                <div class="dashboard-card performance-card">
+                    <div class="card-header">
+                        <h3>Performance Trend</h3>
+                        <div class="time-filter">
+                            <button class="filter-btn active" data-period="7d">7D</button>
+                            <button class="filter-btn" data-period="1m">1M</button>
+                            <button class="filter-btn" data-period="3m">3M</button>
+                        </div>
+                    </div>
+                    <div class="performance-chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card quick-actions-card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" data-action="random-problem">
+                            <i class="fas fa-random"></i>
+                            <span>Random Problem</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="daily-challenge">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Daily Challenge</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="practice-session">
+                            <i class="fas fa-dumbbell"></i>
+                            <span>Practice Session</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="mock-interview">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Mock Interview</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <script src="js/dashbord.js"></script>
+</body>
+</html>
