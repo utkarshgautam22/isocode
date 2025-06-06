@@ -334,7 +334,7 @@ class RegistrationManager {
         this.setLoading(true);
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/auth/register`, {
+            const response = await fetch(`${this.apiBaseUrl}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -352,6 +352,10 @@ class RegistrationManager {
                 this.showVerificationModal(this.formData.email);
                 
                 this.showNotification('Registration successful! Please check your email for verification.', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = `${this.apiBaseUrl}/login`;
+                }, 700);
                 
             } else {
                 throw new Error(data.message || 'Registration failed');
@@ -815,7 +819,7 @@ class RegistrationManager {
             .then(response => {
                 if (response.ok) {
                     // User is already logged in, redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    window.location.href = `${this.apiBaseUrl}/dashboard`;
                 } else {
                     // Token is invalid, remove it
                     localStorage.removeItem('authToken');

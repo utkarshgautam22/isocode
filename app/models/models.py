@@ -1,16 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, Float, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, Float
+from sqlalchemy.orm import relationship
 from datetime import datetime
-import os
-
-# Database URL - replace with your actual credentials
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://codejudge:12345678@localhost/codejudge")
-
-# Create SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+from app.db.database import Base
 
 # User model
 class User(Base):
@@ -20,8 +11,17 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    college = Column(String, nullable=True)
+    department = Column(String, nullable=True)
+    year = Column(String, nullable=True)
+    programming_experience = Column(String, nullable=True)
+    newsletter_subscribed = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
+    is_email_verified = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.utcnow)
     
     # Relationships
     submissions = relationship("Submission", back_populates="user")
@@ -33,24 +33,28 @@ class Problem(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    # tag = Column(String, nullable=False)  # e.g., "Sorting", "Graph", etc.
     difficulty = Column(String, nullable=False)  # Easy, Medium, Hard
-    time_limit = Column(Float, default=1.0)  # seconds
-    memory_limit = Column(Integer, default=128)  # MB
+    examples = Column(Text, nullable=True)  # JSON string of examples
+    constraints = Column(Text, nullable=True)  #string of constraints
+    tags = Column(Text, nullable=True)  # list of string of tags
+    acceptance = Column(Float, default=0.0)  # Acceptance rate as a percentage
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
+    time = Column(String, default="O(nlogn)")  # big o notation for time limit
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
     test_cases = relationship("TestCase", back_populates="problem")
     submissions = relationship("Submission", back_populates="problem")
-
+    
 # TestCase model
 class TestCase(Base):
     __tablename__ = "test_cases"
     
     id = Column(Integer, primary_key=True, index=True)
     problem_id = Column(Integer, ForeignKey("problems.id"))
-    input_data = Column(Text)
-    expected_output = Column(Text)
+    input_data = Column(Text)  # Format: "number_of_test_cases\ntest1\ntest2\ntest3"
+    expected_output = Column(Text)  # Format: "number_of_outputs\noutput1\noutput2\noutput3"
     is_sample = Column(Boolean, default=False)  # Sample test cases are visible to users
     
     # Relationship
@@ -90,14 +94,5 @@ class TestResult(Base):
     # Relationship
     submission = relationship("Submission", back_populates="test_results")
 
-# Create all tables
-def create_tables():
-    Base.metadata.create_all(bind=engine)
-
-# Get database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# TestCase relationship for TestResult
+TestResult.test_case = relationship("TestCase", backref="test_results")

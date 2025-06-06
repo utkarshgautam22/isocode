@@ -765,7 +765,7 @@ class ForgotPasswordManager {
             .then(response => {
                 if (response.ok) {
                     // User is already logged in, redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    window.location.href = `${this.apiBaseUrl}/dashboard`;
                 } else {
                     // Token is invalid, remove it
                     localStorage.removeItem('authToken');

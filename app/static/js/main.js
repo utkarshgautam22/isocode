@@ -203,7 +203,7 @@ class LeetCodeClone {
     }
 
     navigateToProblem(problemId) {
-        window.location.href = `problem.html?id=${problemId}`;
+        window.location.href = `${this.apiBaseUrl}/dashboard?id=${problemId}`;
     }
 
     handleSearch(event) {
@@ -324,7 +324,7 @@ class LeetCodeClone {
                             </span>
                         </div>
                         <p>Complete today's challenge to earn bonus points!</p>
-                        <button class="btn-primary" onclick="window.location.href='problem.html?id=${todaysProblem?.id || 1}'">
+                        <button class="btn-primary" onclick="window.location.href=${this.apiBaseUrl}/dashboard?id=${todaysProblem?.id || 1}'">
                             Start Challenge
                         </button>
                     </div>

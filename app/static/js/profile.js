@@ -18,7 +18,7 @@ class ProfilePage {
         try {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                window.location.href = 'index.html';
+                window.location.href = `${this.apiBaseUrl}/dashboard`;;
                 return;
             }
 

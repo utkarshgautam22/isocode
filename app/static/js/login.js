@@ -161,14 +161,14 @@ class LoginManager {
                 }
 
                 // Save auth token
-                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('authToken', data.access_token);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
                 this.showNotification('Login successful! Redirecting...', 'success');
                 
                 // Redirect after short delay
                 setTimeout(() => {
-                    window.location.href = data.redirectUrl || 'dashboard.html';
+                    window.location.href = `${this.apiBaseUrl}/dashboard`;
                 }, 1500);
 
             } else {
@@ -554,7 +554,7 @@ class LoginManager {
             .then(response => {
                 if (response.ok) {
                     // User is already logged in, redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    window.location.href = `${this.apiBaseUrl}/dashboard`;
                 } else {
                     // Token is invalid, remove it
                     localStorage.removeItem('authToken');

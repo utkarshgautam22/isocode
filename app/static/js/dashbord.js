@@ -251,8 +251,8 @@ class DashboardManager {
             localStorage.removeItem('user');
             this.showToast('Logged out successfully!', 'success');
             setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1000);
+                    window.location.href = `${this.apiBaseUrl}/login`;
+                }, 1000);
         }
     }
 

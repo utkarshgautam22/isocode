@@ -1,6 +1,7 @@
 // Complete Problems Page Manager
 class ProblemsManager {
     constructor() {
+        this.apiBaseUrl = window.apiBaseUrl || ''; // Set this to your API base URL, e.g., '/api' or 'http://localhost:8000/api'
         this.currentTheme = localStorage.getItem('theme') || 'light';
         this.sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         this.problems = [];
@@ -24,7 +25,7 @@ class ProblemsManager {
         this.showLoadingScreen();
         this.applyTheme();
         this.setupEventListeners();
-        this.loadMockProblems();
+        this.loadproblems();
         this.applyFilters();
         this.updateStats();
         
@@ -217,131 +218,19 @@ class ProblemsManager {
         }
     }
 
-    loadMockProblems() {
-        this.problems = [
-            {
-                id: 1,
-                title: "Two Sum",
-                difficulty: "easy",
-                acceptance: 49.2,
-                frequency: 85,
-                status: "solved",
-                tags: ["Array", "Hash Table"],
-                description: "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
-                category: "array"
-            },
-            {
-                id: 2,
-                title: "Add Two Numbers",
-                difficulty: "medium",
-                acceptance: 35.8,
-                frequency: 72,
-                status: "attempted",
-                tags: ["Linked List", "Math", "Recursion"],
-                description: "You are given two non-empty linked lists representing two non-negative integers.",
-                category: "linked-list"
-            },
-            {
-                id: 3,
-                title: "Longest Substring Without Repeating Characters",
-                difficulty: "medium",
-                acceptance: 33.1,
-                frequency: 78,
-                status: "solved",
-                tags: ["Hash Table", "String", "Sliding Window"],
-                description: "Given a string s, find the length of the longest substring without repeating characters.",
-                category: "string"
-            },
-            {
-                id: 4,
-                title: "Median of Two Sorted Arrays",
-                difficulty: "hard",
-                acceptance: 34.2,
-                frequency: 45,
-                status: "todo",
-                tags: ["Array", "Binary Search", "Divide and Conquer"],
-                description: "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median.",
-                category: "binary-search"
-            },
-            {
-                id: 5,
-                title: "Longest Palindromic Substring",
-                difficulty: "medium",
-                acceptance: 31.8,
-                frequency: 65,
-                status: "attempted",
-                tags: ["String", "Dynamic Programming"],
-                description: "Given a string s, return the longest palindromic substring in s.",
-                category: "dynamic-programming"
-            },
-            {
-                id: 6,
-                title: "ZigZag Conversion",
-                difficulty: "medium",
-                acceptance: 40.5,
-                frequency: 35,
-                status: "todo",
-                tags: ["String"],
-                description: "The string PAYPALISHIRING is written in a zigzag pattern.",
-                category: "string"
-            },
-            {
-                id: 7,
-                title: "Reverse Integer",
-                difficulty: "easy",
-                acceptance: 25.8,
-                frequency: 55,
-                status: "solved",
-                tags: ["Math"],
-                description: "Given a signed 32-bit integer x, return x with its digits reversed.",
-                category: "math"
-            },
-            {
-                id: 8,
-                title: "String to Integer (atoi)",
-                difficulty: "medium",
-                acceptance: 16.2,
-                frequency: 42,
-                status: "attempted",
-                tags: ["String"],
-                description: "Implement the myAtoi(string s) function.",
-                category: "string"
-            },
-            {
-                id: 9,
-                title: "Palindrome Number",
-                difficulty: "easy",
-                acceptance: 52.1,
-                frequency: 68,
-                status: "solved",
-                tags: ["Math"],
-                description: "Given an integer x, return true if x is palindrome integer.",
-                category: "math"
-            },
-            {
-                id: 10,
-                title: "Regular Expression Matching",
-                difficulty: "hard",
-                acceptance: 27.8,
-                frequency: 38,
-                status: "todo",
-                tags: ["String", "Dynamic Programming", "Recursion"],
-                description: "Given an input string s and a pattern p, implement regular expression matching.",
-                category: "dynamic-programming"
-            },
-            // Generate more mock problems
-            ...Array.from({length: 440}, (_, i) => ({
-                id: i + 11,
-                title: `Problem ${i + 11}`,
-                difficulty: ["easy", "medium", "hard"][Math.floor(Math.random() * 3)],
-                acceptance: Math.floor(Math.random() * 60) + 20,
-                frequency: Math.floor(Math.random() * 100),
-                status: ["solved", "attempted", "todo"][Math.floor(Math.random() * 3)],
-                tags: [["Array", "String"], ["Math", "Tree"], ["Graph", "Dynamic Programming"]][Math.floor(Math.random() * 3)],
-                description: `This is a sample description for problem ${i + 11}.`,
-                category: ["array", "string", "math", "tree", "graph", "dynamic-programming"][Math.floor(Math.random() * 6)]
-            }))
-        ];
+    async loadproblems() {
+        const problem_url = `${this.apiBaseUrl}/problems`;
+        this.problems = [];
+        try {
+            const response = await fetch(problem_url);
+            const data = await response.json();
+            this.problems = data.problems || [];
+            this.applyFilters();
+            this.updateStats();
+        } catch (error) {
+            console.error('Error loading problems:', error);
+            this.showToast('Failed to load problems', 'error');
+        }
     }
 
     applyFilters() {
@@ -679,8 +568,8 @@ class ProblemsManager {
 
     openProblem(problemId) {
         this.showToast(`Opening problem ${problemId}...`, 'info');
-        // Here you would typically navigate to the problem page
-        // window.location.href = `problem.html?id=${problemId}`;
+        // Navigate to the problem page with the problem ID
+        window.location.href = `/problem?id=${problemId}`;
     }
 
     openRandomProblem() {
@@ -742,7 +631,7 @@ class ProblemsManager {
             localStorage.removeItem('user');
             this.showToast('Logged out successfully!', 'success');
             setTimeout(() => {
-                window.location.href = 'login.html';
+                window.location.href = `${this.apiBaseUrl}/login`;;
             }, 1000);
         }
     }

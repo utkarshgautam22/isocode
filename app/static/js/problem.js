@@ -210,17 +210,29 @@ class ModernProblemDashboard {
             const urlParams = new URLSearchParams(window.location.search);
             const problemId = urlParams.get('id') || '1';
             
-            // Try to load from API
+            // Get problem and test cases data from API
             const response = await fetch(`${this.apiBaseUrl}/problems/${problemId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch problem');
+            }
             
-            if (response.ok) {
-                const data = await response.json();
-                this.currentProblem = data.problem;
-                this.testCases = data.sample_test_cases || [];
-            } else {
-                // Fallback to mock data
-                this.currentProblem = this.getMockProblem(problemId);
-                this.testCases = this.getMockTestCases();
+            const data = await response.json();
+            this.currentProblem = data.problem;
+
+            this.testCases = data.sample_test_cases || [];
+            console.log('testCases:', this.testCases);
+            
+            if (!this.currentProblem) {
+                document.getElementById('problemContainer').innerHTML = `
+                    <div class="no-problem-found">
+                        <h3>Problem Not Found</h3>
+                        <p>The requested problem could not be loaded.</p>
+                        <a href="/problemsDashboard.html" class="btn primary-btn">
+                            <i class="fas fa-arrow-left"></i> Back to Problems
+                        </a>
+                    </div>
+                `;
+                return;
             }
             
             this.renderProblem();
@@ -229,11 +241,17 @@ class ModernProblemDashboard {
             
         } catch (error) {
             console.error('Error loading problem:', error);
-            this.currentProblem = this.getMockProblem('1');
-            this.testCases = this.getMockTestCases();
-            this.renderProblem();
-            this.renderTestCases();
-            this.loadCodeTemplate();
+            this.showNotification('Error loading problem', 'error');
+            
+            document.getElementById('problemContainer').innerHTML = `
+                <div class="no-problem-found">
+                    <h3>Error Loading Problem</h3>
+                    <p>An error occurred while trying to load the problem.</p>
+                    <a href="/problemsDashboard.html" class="btn primary-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Problems
+                    </a>
+                </div>
+            `;
         } finally {
             this.hideProgress();
         }
@@ -265,64 +283,39 @@ class ModernProblemDashboard {
         }
     }
 
-    getMockProblem(id) {
-        const problems = {
-            '1': {
-                id: 1,
-                title: 'Two Sum',
-                difficulty: 'Easy',
-                description: `Given an array of integers <code>nums</code> and an integer <code>target</code>, return <em>indices of the two numbers such that they add up to target</em>.
-                
-                <p>You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the same element twice.</p>
-                
-                <p>You can return the answer in any order.</p>`,
-                examples: [
-                    {
-                        input: 'nums = [2,7,11,15], target = 9',
-                        output: '[0,1]',
-                        explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].'
-                    },
-                    {
-                        input: 'nums = [3,2,4], target = 6',
-                        output: '[1,2]',
-                        explanation: 'Because nums[1] + nums[2] == 6, we return [1, 2].'
-                    },
-                    {
-                        input: 'nums = [3,3], target = 6',
-                        output: '[0,1]',
-                        explanation: 'Because nums[0] + nums[1] == 6, we return [0, 1].'
-                    }
-                ],
-                constraints: [
-                    '2 ≤ nums.length ≤ 10⁴',
-                    '-10⁹ ≤ nums[i] ≤ 10⁹',
-                    '-10⁹ ≤ target ≤ 10⁹',
-                    'Only one valid answer exists.'
-                ],
-                tags: ['Array', 'Hash Table'],
-                likes: 1234,
-                dislikes: 56
+    // This method is kept for backward compatibility or for use in other places
+    async getProblem(id) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/problems/${id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch problem');
             }
-        };
-        
-        return problems[id] || problems['1'];
+            
+            const data = await response.json();
+            return data.problem;
+        } catch (error) {
+            console.error('Error fetching problem:', error);
+            this.showNotification('Problem not found or error loading data', 'error');
+            return null;
+        }
     }
 
-    getMockTestCases() {
-        return [
-            {
-                input: '[2,7,11,15]\n9',
-                expected_output: '[0,1]'
-            },
-            {
-                input: '[3,2,4]\n6',
-                expected_output: '[1,2]'
-            },
-            {
-                input: '[3,3]\n6',
-                expected_output: '[0,1]'
+    // This method is no longer used since we fetch test cases along with the problem
+    // Kept for reference or in case it's needed elsewhere
+    async getTestCases(problemId) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/problems/${problemId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch test cases');
             }
-        ];
+            
+            const data = await response.json();
+            console.log('Fetched test cases:', data.sample_test_cases);
+            return data.sample_test_cases || [];
+        } catch (error) {
+            console.error('Error fetching test cases:', error);
+            return [];
+        }
     }
 
     renderProblem() {
@@ -402,7 +395,7 @@ class ModernProblemDashboard {
                 <h4>Test Case ${index + 1}</h4>
                 <div class="test-input">
                     <h5>Input:</h5>
-                    <pre>${testCase.input}</pre>
+                    <pre>${testCase.input_data}</pre>
                 </div>
                 <div class="test-output">
                     <h5>Expected Output:</h5>
@@ -501,24 +494,40 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize){
         }
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/run/`, {
+            if (!this.currentProblem || !this.currentProblem.id) {
+                throw new Error('Problem ID is missing');
+            }
+
+            const response = await fetch(`${this.apiBaseUrl}/run/${this.currentProblem.id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     code: code,
-                    language: language,
-                    input: this.testCases[0]?.input || ''
+                    language: language
                 })
             });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const result = await response.json();
+            console.log('Run result:', result);
             this.displayRunResult(result);
 
         } catch (error) {
             console.error('Error running code:', error);
-            this.displayMockRunResult();
+            const outputContent = document.getElementById('outputContent');
+            if (outputContent) {
+                outputContent.innerHTML = `
+                    <div class="error-result">
+                        <h4>Error</h4>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
         }
     }
 
@@ -636,14 +645,72 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize){
                     <pre>${result.error}</pre>
                 </div>
             `;
+        } else if (result.result) {
+            const testResult = result.result;
+            
+            // Check if all tests passed
+            const allPassed = testResult.all_passed || false;
+            const testResults = testResult.test_results || [];
+            
+            let html = '';
+            
+            if (allPassed) {
+                html += `
+                    <div class="success-result">
+                        <h4>✓ All Tests Passed!</h4>
+                        <p class="execution-stats">
+                            <span>Execution Time: ${testResult.execution_time || 'N/A'} ms</span>
+                            <span>Memory Used: ${testResult.memory_used || 'N/A'} MB</span>
+                        </p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="error-result">
+                        <h4>✗ Some Tests Failed</h4>
+                        <p class="execution-stats">
+                            <span>Execution Time: ${testResult.execution_time || 'N/A'} ms</span>
+                            <span>Memory Used: ${testResult.memory_used || 'N/A'} MB</span>
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Show individual test results
+            html += '<div class="test-results-container">';
+            
+            testResults.forEach((test, index) => {
+                const passClass = test.passed ? 'success-result' : 'error-result';
+                const passIcon = test.passed ? '✓' : '✗';
+                
+                html += `
+                    <div class="test-case ${passClass}">
+                        <h5>${passIcon} Test Case ${test.test_case || index + 1}</h5>
+                        <div class="test-details">
+                            <div class="test-io">
+                                <p><strong>Input:</strong></p>
+                                <pre>${test.input || 'N/A'}</pre>
+                            </div>
+                            <div class="test-io">
+                                <p><strong>Expected Output:</strong></p>
+                                <pre>${test.expected_output || 'N/A'}</pre>
+                            </div>
+                            <div class="test-io">
+                                <p><strong>Your Output:</strong></p>
+                                <pre>${test.actual_output || 'N/A'}</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            outputContent.innerHTML = html;
         } else {
             outputContent.innerHTML = `
-                <div class="success-result">
-                    <h4>✓ Code executed successfully</h4>
-                    <div class="test-result">
-                        <p><strong>Output:</strong> ${result.result || 'No output'}</p>
-                        <p><strong>Runtime:</strong> ${Math.floor(Math.random() * 100) + 50} ms</p>
-                    </div>
+                <div class="error-result">
+                    <h4>Unknown Response Format</h4>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
                 </div>
             `;
         }

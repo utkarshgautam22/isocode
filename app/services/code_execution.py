@@ -30,27 +30,31 @@ logger = logging.getLogger('codejudge')
 # Initialize Docker client
 client = docker.from_env()
 
-def parse_test_cases(input_data, expected_output=None,test_case_delimiter='\n'):
-    
+def parse_test_cases(input_data, expected_output=None, test_case_delimiter='\n'):
+    """
+    Parse test cases from input_data and expected_output.
+    Each line in input_data represents a separate test case.
+    Each line in expected_output represents the expected result for that test case.
+    """
     if not input_data:
         return [{'input': '', 'expected_output': expected_output}]
     
     # Split input by test case delimiter
-    input_parts = re.split(test_case_delimiter, input_data)
+    input_parts = input_data.strip().split(test_case_delimiter)
     # Remove empty parts and strip whitespace
     input_parts = [part.strip() for part in input_parts if part.strip()]
     
     # If no test case delimiters found, treat the whole input as one test case
-    if len(input_parts) == 1 and input_data.strip() == input_parts[0]:
-        return [{'input': input_data, 'expected_output': expected_output}]
+    if len(input_parts) == 1:
+        return [{'input': input_data.strip(), 'expected_output': expected_output}]
     
-    # If expected output is provided, try to split it into parts as well
+    # If expected output is provided, split it into parts as well
     expected_parts = []
     if expected_output:
-        expected_parts = re.split(test_case_delimiter, expected_output)
+        expected_parts = expected_output.strip().split(test_case_delimiter)
         expected_parts = [part.strip() for part in expected_parts if part.strip()]
     
-    # Create test cases
+    # Create test cases - each line is a separate test case
     test_cases = []
     for i, input_part in enumerate(input_parts):
         test_case = {
@@ -86,7 +90,7 @@ def compare_output(actual, expected):
         else:
             return False, f"Output has extra lines. Expected {len(lines_expected)} lines but got {len(lines_actual)}"
 
-def execute_code(language, source_code, input_data=None, expected_output=None, early_termination=True):
+def execute_code(language, source_code, input_data=None, expected_output=None, early_termination=True, test_case_delimiter='\n'):
     logger.info(f"Starting test for {language}")
     # Generate a unique ID for this submission
     code_id = str(uuid.uuid4())
@@ -121,7 +125,7 @@ def execute_code(language, source_code, input_data=None, expected_output=None, e
     logger.info(f"Created file: {filename}")
     
     # Parse test cases from input data
-    test_cases = parse_test_cases(input_data, expected_output)
+    test_cases = parse_test_cases(input_data, expected_output, test_case_delimiter)
     logger.info(f"Found {len(test_cases)} test case(s)")
     
     # Write test cases to files

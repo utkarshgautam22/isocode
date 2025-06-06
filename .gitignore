@@ -1,0 +1,103 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+testing
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.env/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Docker
+.docker/
+
+# Alembic migration specific
+alembic/versions/*.py
+!alembic/versions/__init__.py
+
+# Submission files
+submissions/
+*/submissions/*
+!*/submissions/.gitkeep
+
+# PostgreSQL
+*.dump
+*.backup
+pgdata/
+
+# Code execution artifacts
+*.out
+*.class
+*.o
+*.exe
+
+# Security files
+.env
+*.pem
+*.key
+*.crt
+
+# Config files with secrets
+config.ini
+secrets.toml
+secrets.yaml
+secrets.json
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Cache files
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local development configuration
+local_settings.py
+
+# Static files
+static/uploads/
+media/
+recreate_db.py
+solution.py
+docs/
+tests/
